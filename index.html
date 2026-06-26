@@ -1,0 +1,3166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гоголь. Тень на стене — Квест</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e8e0d8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* === ФОНОВАЯ МУЗЫКА === */
+        #bg-music {
+            position: fixed;
+            bottom: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0.01;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 10px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid #2a1a1a;
+            height: 60px;
+        }
+
+        .navbar .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #c8b8a8;
+            letter-spacing: 2px;
+        }
+        .navbar .logo span {
+            color: #8a5a4a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links button {
+            background: transparent;
+            border: 1px solid #2a1a1a;
+            color: #8a7a6a;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links button:hover {
+            background: #2a1a1a;
+            color: #e8d8c8;
+            border-color: #5a3a2a;
+        }
+
+        .nav-links button.active {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            border-color: #5a3a2a;
+        }
+
+        .page {
+            display: none;
+            height: 100vh;
+            padding-top: 60px;
+            animation: pageFade 0.6s ease;
+            overflow: hidden;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes pageFade {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== СТРАНИЦА 1: ГЛАВНАЯ ===== */
+        #page-home {
+            background: #0a0a0a;
+            position: relative;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #page-home .bg-image {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://cdnstatic.rg.ru/crop1000x666/uploads/images/2025/03/31/chatgpt-image-31-mar-2025-g-13_52_33_7be.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.7;
+            z-index: 0;
+        }
+
+        #page-home .overlay-dark {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.85) 100%);
+            z-index: 1;
+        }
+
+        .home-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .home-content .portrait {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-image: url('https://avatars.mds.yandex.net/i?id=0631125e089566f9b9f02f32f16cf2d1_l-5341960-images-thumbs&ref=rim&n=13&w=1200&h=800');
+            background-size: cover;
+            background-position: center top;
+            border: 4px solid #5a3a2a;
+            box-shadow: 0 0 60px rgba(90, 58, 42, 0.3);
+            transition: 0.4s;
+        }
+        .home-content .portrait:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.5);
+        }
+
+        .home-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: #f0e8e0;
+            text-shadow: 0 4px 40px rgba(0, 0, 0, 0.8);
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .home-content h1 span {
+            color: #8a5a4a;
+        }
+
+        .home-content .subtitle {
+            font-size: 16px;
+            color: #b4a89c;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .home-content .btn-start {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 12px 40px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .home-content .btn-start:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        /* ===== СТРАНИЦА 2: ДИАЛОГ ===== */
+        #page-dialog {
+            background: #0d0a08;
+            background-image: radial-gradient(circle at 30% 20%, #1a120e 0%, #0a0806 100%);
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #page-dialog .bat-eyes-container {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        #page-dialog .bat-eyes-container.active {
+            opacity: 1;
+        }
+
+        .bat-eye {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bat-eye .eye {
+            width: 20px;
+            height: 24px;
+            background: #1a1a0a;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            border: 1.5px solid #3a3a1a;
+            transition: all 0.15s ease;
+            overflow: hidden;
+        }
+
+        .bat-eye .eye::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 18px;
+            background: #0a0a05;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .bat-eye .eye .iris {
+            position: absolute;
+            inset: 2px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transition: all 0.15s ease;
+        }
+        .bat-eye .eye .iris::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse at 30% 40%, rgba(255, 255, 200, 0.6) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        .bat-eye.shade-1 .eye .iris {
+            background: radial-gradient(circle at center, #ffdd44 0%, #cc9900 100%);
+        }
+        .bat-eye.shade-2 .eye .iris {
+            background: radial-gradient(circle at center, #ffcc33 0%, #b8860b 100%);
+        }
+        .bat-eye.shade-3 .eye .iris {
+            background: radial-gradient(circle at center, #ffe066 0%, #d4a017 100%);
+        }
+        .bat-eye.shade-4 .eye .iris {
+            background: radial-gradient(circle at center, #ffd700 0%, #c8960c 100%);
+        }
+        .bat-eye.shade-5 .eye .iris {
+            background: radial-gradient(circle at center, #f0c040 0%, #a67c00 100%);
+        }
+        .bat-eye.shade-6 .eye .iris {
+            background: radial-gradient(circle at center, #e8b830 0%, #8b7500 100%);
+        }
+
+        .bat-eye .eye.closed {
+            height: 2px;
+            border-radius: 2px;
+            background: #0a0a05;
+            border-color: #1a1a0a;
+        }
+        .bat-eye .eye.closed .iris {
+            opacity: 0;
+        }
+        .bat-eye .eye.closed::after {
+            height: 2px;
+            opacity: 0;
+        }
+
+        .bat-eye.pos-1 {
+            top: 6%;
+            left: 4%;
+            transform: scale(1);
+        }
+        .bat-eye.pos-2 {
+            top: 12%;
+            right: 6%;
+            transform: scale(0.8);
+        }
+        .bat-eye.pos-3 {
+            top: 38%;
+            left: 1%;
+            transform: scale(1.2);
+        }
+        .bat-eye.pos-4 {
+            bottom: 30%;
+            right: 2%;
+            transform: scale(0.9);
+        }
+        .bat-eye.pos-5 {
+            bottom: 8%;
+            left: 10%;
+            transform: scale(1.1);
+        }
+        .bat-eye.pos-6 {
+            top: 50%;
+            right: 12%;
+            transform: scale(0.7);
+        }
+
+        .bat-eye.pos-1 .eye {
+            width: 22px;
+            height: 26px;
+        }
+        .bat-eye.pos-1 .eye::after {
+            width: 5px;
+            height: 20px;
+        }
+        .bat-eye.pos-2 .eye {
+            width: 16px;
+            height: 20px;
+        }
+        .bat-eye.pos-2 .eye::after {
+            width: 3px;
+            height: 14px;
+        }
+        .bat-eye.pos-3 .eye {
+            width: 26px;
+            height: 30px;
+        }
+        .bat-eye.pos-3 .eye::after {
+            width: 6px;
+            height: 22px;
+        }
+        .bat-eye.pos-4 .eye {
+            width: 18px;
+            height: 22px;
+        }
+        .bat-eye.pos-4 .eye::after {
+            width: 4px;
+            height: 16px;
+        }
+        .bat-eye.pos-5 .eye {
+            width: 20px;
+            height: 24px;
+        }
+        .bat-eye.pos-5 .eye::after {
+            width: 4px;
+            height: 18px;
+        }
+        .bat-eye.pos-6 .eye {
+            width: 14px;
+            height: 18px;
+        }
+        .bat-eye.pos-6 .eye::after {
+            width: 3px;
+            height: 12px;
+        }
+
+        #page-dialog::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(90, 58, 42, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(90, 58, 42, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .dialog-container {
+            display: flex;
+            align-items: stretch;
+            max-width: 1200px;
+            width: 100%;
+            height: calc(100vh - 60px);
+            margin: 0 auto;
+            padding: 20px 28px;
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dialog-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+            position: relative;
+            min-height: 0;
+        }
+
+        .dialog-text .invitation-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #c8b8a8;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 40px rgba(90, 58, 42, 0.2);
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .dialog-text .invitation-title.visible {
+            opacity: 1;
+        }
+
+        .phrases-wrapper {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        .phrases-wrapper.active {
+            opacity: 1;
+        }
+
+        .floating-phrase {
+            position: absolute;
+            opacity: 0;
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #d4c4b8;
+            letter-spacing: 0.3px;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            pointer-events: none;
+            transition: opacity 1.8s ease, transform 1.8s ease;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: rgba(10, 8, 6, 0.6);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(90, 58, 42, 0.15);
+            max-width: 70%;
+            z-index: 2;
+            transform: translateY(30px) scale(0.95);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-phrase.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .floating-phrase.hidden {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+        .floating-phrase .highlight {
+            color: #b88a7a;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(184, 138, 122, 0.2);
+        }
+
+        .floating-phrase.pos-1 {
+            top: 5%;
+            left: 5%;
+        }
+        .floating-phrase.pos-2 {
+            top: 10%;
+            right: 8%;
+        }
+        .floating-phrase.pos-3 {
+            top: 45%;
+            left: 3%;
+        }
+        .floating-phrase.pos-4 {
+            bottom: 30%;
+            right: 5%;
+        }
+        .floating-phrase.pos-5 {
+            bottom: 8%;
+            left: 10%;
+        }
+        .floating-phrase.pos-6 {
+            top: 30%;
+            left: 20%;
+        }
+        .floating-phrase.pos-7 {
+            bottom: 40%;
+            left: 25%;
+        }
+        .floating-phrase.pos-8 {
+            top: 55%;
+            right: 10%;
+        }
+        .floating-phrase.pos-9 {
+            bottom: 15%;
+            right: 20%;
+        }
+        .floating-phrase.pos-10 {
+            top: 15%;
+            left: 30%;
+        }
+        .floating-phrase.pos-11 {
+            bottom: 5%;
+            left: 40%;
+        }
+
+        .floating-phrase.shadow-anim {
+            animation: shadowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes shadowPulse {
+            0%,
+            100% {
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(90, 58, 42, 0.05);
+                border-color: rgba(90, 58, 42, 0.15);
+            }
+            50% {
+                box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(90, 58, 42, 0.15);
+                border-color: rgba(90, 58, 42, 0.3);
+            }
+        }
+
+        .shadow-aura {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(90, 58, 42, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transition: all 2s ease;
+        }
+        .shadow-aura.aura-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+        }
+        .shadow-aura.aura-2 {
+            width: 400px;
+            height: 400px;
+            bottom: 5%;
+            right: 2%;
+        }
+        .shadow-aura.aura-3 {
+            width: 250px;
+            height: 250px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dialog-text .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #2a1a1a;
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .dialog-text .progress-bar.active {
+            opacity: 1;
+        }
+
+        .dialog-text .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2a1a1a;
+            border: 1px solid #3a2a1a;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+        .dialog-text .progress-dot.active {
+            background: #8a5a4a;
+            border-color: #8a5a4a;
+            box-shadow: 0 0 20px rgba(138, 90, 74, 0.3);
+            transform: scale(1.3);
+        }
+        .dialog-text .progress-dot.done {
+            background: #4a3a2a;
+            border-color: #5a3a2a;
+        }
+
+        .dialog-portrait {
+            flex: 0 0 50%;
+            max-width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 5;
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .dialog-portrait .portrait-frame {
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 0.85 / 1;
+            border-radius: 20px;
+            background-image: url('https://avatars.mds.yandex.net/i?id=cf29b81db82a6228cd2ffd3e863f7c15_l-7904411-images-thumbs&n=13');
+            background-size: cover;
+            background-position: center top;
+            border: 2px solid #3a2a1a;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 0 80px rgba(0, 0, 0, 0.2);
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .dialog-portrait .portrait-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);
+            pointer-events: none;
+        }
+        .dialog-portrait .portrait-frame:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 60px rgba(90, 58, 42, 0.15);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+            animation: modalAppear 0.6s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-box {
+            background: #0d0a08;
+            border: 2px solid #3a2a1a;
+            border-radius: 24px;
+            padding: 40px 45px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.1), inset 0 0 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #3a2a1a, #0d0a08, #3a2a1a);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .modal-box .candle {
+            font-size: 42px;
+            margin-bottom: 6px;
+            display: block;
+            animation: flicker 2s ease-in-out infinite;
+        }
+
+        @keyframes flicker {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            25% {
+                opacity: 0.9;
+            }
+            75% {
+                opacity: 0.8;
+            }
+        }
+
+        .modal-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 40px rgba(90, 58, 42, 0.2);
+        }
+
+        .modal-box p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #8a7a6a;
+            line-height: 1.8;
+            margin-bottom: 22px;
+            font-style: italic;
+        }
+
+        .modal-box .modal-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-box .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 14px 36px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            min-width: 110px;
+        }
+
+        .modal-box .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        .modal-box .btn-shadow.btn-no {
+            border-color: #3a2a1a;
+            color: #5a4a3a;
+        }
+
+        .modal-box .btn-shadow.btn-no:hover {
+            background: #2a1a1a;
+            border-color: #3a2a1a;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== СТРАНИЦА 3: ИГРА ===== */
+        #page-game {
+            background: #0a0a0a;
+            height: 100vh;
+            padding: 60px 0 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #page-game::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(90, 58, 42, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(90, 58, 42, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .game-container {
+            width: 100%;
+            height: calc(100vh - 60px);
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            background: rgba(13, 10, 8, 0.85);
+            border: 1px solid #2a1a1a;
+            border-radius: 0;
+            padding: 30px 40px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+            height: 100%;
+        }
+
+        .game-left {
+            flex: 1.2;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .game-left .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .game-left .game-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            color: #5a4a3a;
+            font-style: italic;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        #gameScene {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .game-left .scene-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            line-height: 1.9;
+            color: #c8b8a8;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #3a2a1a;
+            border-radius: 8px;
+            flex-shrink: 0;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .game-left .scene-text .highlight-text {
+            color: #b88a7a;
+            font-weight: 700;
+        }
+
+        .game-left .scene-text.intro-text {
+            font-size: 26px;
+            line-height: 1.6;
+            padding: 20px 24px;
+            border-left: 4px solid #5a3a2a;
+        }
+
+        .game-left .scene-text.big-text {
+            font-size: 24px;
+            line-height: 1.6;
+            padding: 18px 22px;
+        }
+
+        .game-left .scene-text.medium-text {
+            font-size: 21px;
+            line-height: 1.7;
+            padding: 16px 20px;
+        }
+
+        .game-left .scene-text.video-text {
+            font-size: 22px;
+            line-height: 1.7;
+            padding: 18px 22px;
+            border-left: 4px solid #5a3a2a;
+        }
+
+        .game-left .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+
+        .game-left .choices .choice-btn {
+            background: rgba(20, 16, 14, 0.8);
+            border: 1px solid #2a1a1a;
+            color: #b4a89c;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+        }
+
+        .game-left .choices .choice-btn:hover {
+            background: #2a1a1a;
+            border-color: #5a3a2a;
+            color: #e8d8c8;
+            transform: translateX(6px);
+        }
+
+        .game-left .game-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #1a1410;
+            font-size: 13px;
+            color: #5a4a3a;
+            font-family: 'Inter', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .game-left .game-status .progress {
+            color: #8a7a6a;
+            letter-spacing: 1px;
+        }
+
+        .game-left .game-status .progress span {
+            color: #b88a7a;
+            font-weight: 700;
+        }
+
+        .btn-reset-game {
+            background: transparent;
+            border: 1px solid #2a1a1a;
+            color: #5a4a3a;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .btn-reset-game:hover {
+            border-color: #5a3a2a;
+            color: #b4a89c;
+        }
+
+        .game-image-container {
+            flex: 0 0 50%;
+            max-width: 50%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid #2a1a1a;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0a;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .game-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .game-image-container .video-wrapper {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .game-image-container .video-wrapper iframe {
+            width: 140%;
+            height: 140%;
+            border: none;
+            background: #000;
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            pointer-events: none;
+        }
+
+        /* === ВИДЕО НА ВЕСЬ ЭКРАН === */
+        .fullscreen-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 300;
+            background: #000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .fullscreen-video.active {
+            display: flex;
+        }
+
+        .fullscreen-video .video-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fullscreen-video .video-container iframe {
+            width: 120%;
+            height: 120%;
+            border: none;
+            background: #000;
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            pointer-events: none;
+        }
+
+        .fullscreen-video .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            z-index: 2;
+            transition: background 1.5s ease;
+            pointer-events: none;
+        }
+
+        .fullscreen-video .video-overlay.fade {
+            background: rgba(0, 0, 0, 1);
+        }
+
+        /* === ОКНО "СЛЕДОВАТЬ ЗА ТЕНЬЮ" === */
+        .shadow-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 400;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .shadow-modal.active {
+            display: flex;
+        }
+
+        .shadow-modal .shadow-box {
+            background: rgba(13, 10, 8, 0.95);
+            border: 2px solid #5a3a2a;
+            border-radius: 24px;
+            padding: 40px 50px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.2);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        .shadow-modal .shadow-box .icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .shadow-modal .shadow-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .shadow-modal .shadow-box p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .shadow-modal .shadow-box .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 14px 48px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .shadow-modal .shadow-box .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        /* === ОКНО "Ну что... ты идешь?" === */
+        .follow-modal-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 400;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .follow-modal-2.active {
+            display: flex;
+        }
+
+        .follow-modal-2 .follow-box {
+            background: rgba(13, 10, 8, 0.95);
+            border: 2px solid #5a3a2a;
+            border-radius: 24px;
+            padding: 40px 50px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.2);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        .follow-modal-2 .follow-box .icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .follow-modal-2 .follow-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .follow-modal-2 .follow-box p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .follow-modal-2 .follow-box .additional-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: #6a5a4a;
+            font-style: italic;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            border-top: 1px solid #2a1a1a;
+            padding-top: 14px;
+        }
+
+        .follow-modal-2 .follow-box .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 14px 48px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .follow-modal-2 .follow-box .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        /* === ОКНО "ГОРОД N" === */
+        .city-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 400;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .city-modal.active {
+            display: flex;
+        }
+
+        .city-modal .city-wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            height: 70vh;
+            max-height: 600px;
+            align-items: center;
+        }
+
+        .city-modal .city-box {
+            flex: 1;
+            background: rgba(13, 10, 8, 0.95);
+            border: 2px solid #5a3a2a;
+            border-radius: 24px;
+            padding: 40px 45px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.2);
+            backdrop-filter: blur(6px);
+            animation: pulse 2.5s ease-in-out infinite;
+            max-width: 460px;
+        }
+
+        .city-modal .city-box .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .city-modal .city-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+        }
+
+        .city-modal .city-box p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .city-modal .city-box .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 12px 40px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .city-modal .city-box .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        .city-modal .city-image {
+            flex: 1.2;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #3a2a1a;
+            box-shadow: 0 0 60px rgba(90, 58, 42, 0.15);
+        }
+
+        .city-modal .city-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== ФИНАЛЬНЫЙ ЭКРАН "Ты запомнил дорогу?" ===== */
+        .final-memory-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 500;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        .final-memory-modal.active {
+            display: flex;
+        }
+
+        .final-memory-modal .final-wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            height: 70vh;
+            max-height: 600px;
+            align-items: center;
+        }
+
+        .final-memory-modal .final-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .final-memory-modal .final-content .final-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            text-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .final-memory-modal .final-content .final-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .final-memory-modal .final-content .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 12px 40px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .final-memory-modal .final-content .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        .final-memory-modal .final-image {
+            flex: 1.2;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #3a2a1a;
+            box-shadow: 0 0 60px rgba(90, 58, 42, 0.15);
+        }
+
+        .final-memory-modal .final-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== ПОЛНОЭКРАННОЕ ЗАДАНИЕ НА ПОРЯДОК ===== */
+        .fullscreen-quiz {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 500;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        .fullscreen-quiz.active {
+            display: flex;
+        }
+
+        .fullscreen-quiz .quiz-content {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .fullscreen-quiz .quiz-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #c8b8a8;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .fullscreen-quiz .quiz-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .fullscreen-quiz .order-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            min-height: 60px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #2a1a1a;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: #b4a89c;
+        }
+
+        .fullscreen-quiz .order-display .order-item {
+            color: #b88a7a;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .fullscreen-quiz .names-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 16px 0 24px;
+        }
+
+        .fullscreen-quiz .names-grid .quiz-btn {
+            background: rgba(20, 16, 14, 0.8);
+            border: 2px solid #2a1a1a;
+            color: #b4a89c;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .fullscreen-quiz .names-grid .quiz-btn:hover {
+            background: #2a1a1a;
+            border-color: #5a3a2a;
+            color: #e8d8c8;
+            transform: scale(1.05);
+        }
+
+        .fullscreen-quiz .names-grid .quiz-btn.selected {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .fullscreen-quiz .quiz-status {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: #8a7a6a;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* ===== ФИНАЛЬНЫЙ ЭКРАН С ФОТО (слева текст, справа фото) ===== */
+        .ending-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 600;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .ending-modal.active {
+            display: flex;
+        }
+
+        .ending-modal .ending-wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            height: 80vh;
+            max-height: 700px;
+            align-items: center;
+        }
+
+        .ending-modal .ending-box {
+            flex: 1;
+            background: rgba(13, 10, 8, 0.9);
+            border: 2px solid #5a3a2a;
+            border-radius: 24px;
+            padding: 40px 45px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(90, 58, 42, 0.2);
+            backdrop-filter: blur(6px);
+            animation: pulse 2.5s ease-in-out infinite;
+            max-width: 550px;
+        }
+
+        .ending-modal .ending-box .ending-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #d4c4b8;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .ending-modal .ending-box .ending-text .highlight-text {
+            color: #b88a7a;
+            font-weight: 700;
+        }
+
+        .ending-modal .ending-box .btn-shadow {
+            background: transparent;
+            border: 2px solid #5a3a2a;
+            color: #e8d8c8;
+            padding: 12px 40px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .ending-modal .ending-box .btn-shadow:hover {
+            background: #5a3a2a;
+            color: #f0e8e0;
+            box-shadow: 0 0 50px rgba(90, 58, 42, 0.3);
+            transform: scale(1.03);
+        }
+
+        .ending-modal .ending-image {
+            flex: 1.2;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #3a2a1a;
+            box-shadow: 0 0 60px rgba(90, 58, 42, 0.15);
+        }
+
+        .ending-modal .ending-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 1000px) {
+            .game-container {
+                flex-direction: column-reverse;
+                padding: 20px 24px;
+                gap: 16px;
+                height: calc(100vh - 60px);
+                overflow: hidden;
+            }
+            .game-image-container {
+                flex: 0 0 auto;
+                max-width: 100%;
+                width: 100%;
+                height: 35vh;
+                min-height: 200px;
+            }
+            .game-left {
+                flex: 1;
+                min-height: 0;
+            }
+            .game-left .game-title {
+                font-size: 24px;
+            }
+            .game-left .scene-text {
+                font-size: 18px;
+                padding: 12px 16px;
+                max-height: 40vh;
+            }
+            .game-left .choices .choice-btn {
+                font-size: 16px;
+                padding: 10px 16px;
+            }
+            .dialog-portrait {
+                flex: 0 0 40%;
+                max-width: 40%;
+            }
+            .city-modal .city-wrapper {
+                flex-direction: column;
+                height: auto;
+                gap: 20px;
+            }
+            .city-modal .city-box {
+                max-width: 100%;
+                padding: 30px 30px;
+            }
+            .city-modal .city-image {
+                flex: 0 0 40vh;
+                width: 100%;
+                height: 40vh;
+            }
+            .shadow-modal .shadow-box {
+                padding: 30px 30px;
+            }
+            .shadow-modal .shadow-box h2 {
+                font-size: 28px;
+            }
+            .shadow-modal .shadow-box p {
+                font-size: 18px;
+            }
+            .follow-modal-2 .follow-box {
+                padding: 30px 30px;
+            }
+            .follow-modal-2 .follow-box h2 {
+                font-size: 28px;
+            }
+            .follow-modal-2 .follow-box p {
+                font-size: 18px;
+            }
+            .follow-modal-2 .follow-box .additional-text {
+                font-size: 16px;
+            }
+            .final-memory-modal .final-wrapper {
+                flex-direction: column;
+                height: auto;
+                gap: 20px;
+            }
+            .final-memory-modal .final-content {
+                max-width: 100%;
+                padding: 20px;
+            }
+            .final-memory-modal .final-image {
+                flex: 0 0 40vh;
+                width: 100%;
+                height: 40vh;
+            }
+            .fullscreen-quiz .quiz-title {
+                font-size: 26px;
+            }
+            .fullscreen-quiz .names-grid .quiz-btn {
+                font-size: 17px;
+                padding: 10px 20px;
+                min-width: 100px;
+            }
+            .ending-modal .ending-wrapper {
+                flex-direction: column;
+                height: auto;
+                gap: 20px;
+            }
+            .ending-modal .ending-box {
+                max-width: 100%;
+                padding: 30px 30px;
+            }
+            .ending-modal .ending-box .ending-text {
+                font-size: 17px;
+            }
+            .ending-modal .ending-image {
+                flex: 0 0 40vh;
+                width: 100%;
+                height: 40vh;
+            }
+            .modal-box {
+                padding: 30px 30px;
+                max-width: 440px;
+            }
+            .modal-box h2 {
+                font-size: 26px;
+            }
+            .modal-box p {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dialog-container {
+                flex-direction: column-reverse;
+                padding: 16px 16px;
+                gap: 16px;
+                height: calc(100vh - 60px);
+            }
+            .floating-phrase {
+                font-size: 16px;
+                padding: 12px 16px;
+                max-width: 85%;
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                margin: 6px auto;
+                opacity: 1 !important;
+                transform: none !important;
+                display: block;
+                background: rgba(10, 8, 6, 0.7);
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+                animation: none !important;
+            }
+            .floating-phrase.hidden {
+                display: none;
+            }
+            .floating-phrase.visible {
+                display: block;
+            }
+            .dialog-text .phrases-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                min-height: 0;
+                padding: 6px 0;
+            }
+            .dialog-portrait {
+                flex: 0 0 auto;
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+            }
+            .dialog-portrait .portrait-frame {
+                max-width: 200px;
+                margin: 0 auto;
+                aspect-ratio: 0.75 / 1;
+            }
+            .dialog-text {
+                padding: 6px 0;
+                min-height: 0;
+            }
+            .dialog-text .invitation-title {
+                font-size: 22px;
+            }
+            .shadow-aura {
+                display: none;
+            }
+            .bat-eyes-container {
+                display: none;
+            }
+            .modal-box {
+                padding: 24px 20px;
+            }
+            .modal-box h2 {
+                font-size: 22px;
+            }
+            .modal-box p {
+                font-size: 16px;
+            }
+            .modal-box .btn-shadow {
+                padding: 10px 24px;
+                font-size: 14px;
+                min-width: 80px;
+            }
+            .ending-modal .ending-box .ending-text {
+                font-size: 16px;
+            }
+            .final-memory-modal .final-content .final-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .navbar {
+                padding: 8px 16px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                height: auto;
+                min-height: 50px;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .nav-links button {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+            .home-content h1 {
+                font-size: 28px;
+            }
+            .home-content .portrait {
+                width: 140px;
+                height: 140px;
+            }
+            .page {
+                padding-top: 80px;
+            }
+            #page-game {
+                padding-top: 80px;
+            }
+            .game-container {
+                height: calc(100vh - 80px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-content h1 {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+            .home-content .portrait {
+                width: 120px;
+                height: 120px;
+            }
+            .home-content .btn-start {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+            .floating-phrase {
+                font-size: 14px;
+                padding: 10px 14px;
+                max-width: 95%;
+            }
+            .dialog-portrait .portrait-frame {
+                max-width: 140px;
+            }
+            .dialog-text .invitation-title {
+                font-size: 18px;
+            }
+            .game-container {
+                padding: 12px 12px;
+                gap: 12px;
+                height: calc(100vh - 80px);
+                overflow: hidden;
+            }
+            .game-left .game-title {
+                font-size: 18px;
+            }
+            .game-left .scene-text {
+                font-size: 16px;
+                padding: 10px 12px;
+                max-height: 30vh;
+            }
+            .game-left .choices .choice-btn {
+                font-size: 15px;
+                padding: 8px 12px;
+            }
+            .game-image-container {
+                height: 25vh;
+                min-height: 120px;
+            }
+            .modal-box {
+                padding: 18px 14px;
+            }
+            .modal-box h2 {
+                font-size: 20px;
+            }
+            .modal-box p {
+                font-size: 15px;
+            }
+            .modal-box .btn-shadow {
+                padding: 8px 16px;
+                font-size: 12px;
+                min-width: 60px;
+                letter-spacing: 1px;
+            }
+            .modal-box .modal-buttons {
+                gap: 6px;
+            }
+            .game-left .game-status {
+                font-size: 11px;
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+            .city-modal .city-box {
+                padding: 20px 16px;
+            }
+            .city-modal .city-box h2 {
+                font-size: 22px;
+            }
+            .city-modal .city-box p {
+                font-size: 15px;
+            }
+            .city-modal .city-box .btn-shadow {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+            .city-modal .city-image {
+                flex: 0 0 30vh;
+                height: 30vh;
+            }
+            .shadow-modal .shadow-box {
+                padding: 20px 16px;
+            }
+            .shadow-modal .shadow-box h2 {
+                font-size: 22px;
+            }
+            .shadow-modal .shadow-box p {
+                font-size: 16px;
+            }
+            .shadow-modal .shadow-box .btn-shadow {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+            .follow-modal-2 .follow-box {
+                padding: 20px 16px;
+            }
+            .follow-modal-2 .follow-box h2 {
+                font-size: 22px;
+            }
+            .follow-modal-2 .follow-box p {
+                font-size: 16px;
+            }
+            .follow-modal-2 .follow-box .additional-text {
+                font-size: 14px;
+            }
+            .follow-modal-2 .follow-box .btn-shadow {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+            .final-memory-modal .final-wrapper {
+                gap: 10px;
+            }
+            .final-memory-modal .final-content .final-title {
+                font-size: 20px;
+            }
+            .final-memory-modal .final-content .final-sub {
+                font-size: 15px;
+            }
+            .final-memory-modal .final-image {
+                flex: 0 0 30vh;
+                height: 30vh;
+            }
+            .fullscreen-quiz .quiz-title {
+                font-size: 20px;
+            }
+            .fullscreen-quiz .quiz-sub {
+                font-size: 15px;
+            }
+            .fullscreen-quiz .order-display {
+                font-size: 15px;
+                padding: 12px;
+                min-height: 45px;
+            }
+            .fullscreen-quiz .order-display .order-item {
+                font-size: 16px;
+            }
+            .fullscreen-quiz .names-grid .quiz-btn {
+                font-size: 15px;
+                padding: 8px 16px;
+                min-width: 80px;
+            }
+            .fullscreen-quiz .quiz-status {
+                font-size: 15px;
+            }
+            .ending-modal .ending-box {
+                padding: 20px 16px;
+            }
+            .ending-modal .ending-box .ending-text {
+                font-size: 15px;
+            }
+            .ending-modal .ending-box .btn-shadow {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+            .ending-modal .ending-image {
+                flex: 0 0 30vh;
+                height: 30vh;
+            }
+        }
+
+        @media (min-height: 900px) {
+            .game-image-container {
+                flex: 0 0 55%;
+                max-width: 55%;
+            }
+            .dialog-portrait {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (min-height: 1100px) {
+            .game-image-container {
+                flex: 0 0 58%;
+                max-width: 58%;
+            }
+            .game-left .game-title {
+                font-size: 38px;
+            }
+            .game-left .scene-text {
+                font-size: 24px;
+            }
+            .game-left .choices .choice-btn {
+                font-size: 20px;
+                padding: 16px 24px;
+            }
+            .dialog-text .invitation-title {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ФОНОВАЯ МУЗЫКА ===== -->
+    <iframe id="bg-music" src="https://vk.com/audio167277161_324321093_21bcbf506e2cac0fee" allow="autoplay"></iframe>
+
+    <!-- ===== НАВИГАЦИЯ ===== -->
+    <nav class="navbar">
+        <div class="logo">ГОГОЛЬ<span>·</span></div>
+        <div class="nav-links">
+            <button class="active" data-page="page-home">Начало</button>
+            <button data-page="page-dialog">Диалог</button>
+            <button data-page="page-game">Игра</button>
+        </div>
+    </nav>
+
+    <!-- ===== СТРАНИЦА 1: ГЛАВНАЯ ===== -->
+    <div class="page active" id="page-home">
+        <div class="bg-image"></div>
+        <div class="overlay-dark"></div>
+
+        <div class="home-content">
+            <div class="portrait"></div>
+            <h1>НИКОЛАЙ <span>ГОГОЛЬ</span></h1>
+            <div class="subtitle">Виртуальное путешествие по биографии</div>
+            <button class="btn-start" onclick="navigateTo('page-dialog')">Начать приключение →</button>
+        </div>
+    </div>
+
+    <!-- ===== СТРАНИЦА 2: ДИАЛОГ ===== -->
+    <div class="page" id="page-dialog">
+        <div class="bat-eyes-container" id="batEyesContainer">
+            <div class="bat-eye pos-1 shade-1" data-delay="0">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+            <div class="bat-eye pos-2 shade-2" data-delay="1.2">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+            <div class="bat-eye pos-3 shade-3" data-delay="2.5">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+            <div class="bat-eye pos-4 shade-4" data-delay="0.8">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+            <div class="bat-eye pos-5 shade-5" data-delay="1.8">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+            <div class="bat-eye pos-6 shade-6" data-delay="3.2">
+                <div class="eye"><div class="iris"></div></div>
+                <div class="eye"><div class="iris"></div></div>
+            </div>
+        </div>
+
+        <div class="shadow-aura aura-1"></div>
+        <div class="shadow-aura aura-2"></div>
+        <div class="shadow-aura aura-3"></div>
+
+        <div class="dialog-container">
+            <div class="dialog-text">
+                <div class="invitation-title" id="invitationTitle">Не торопись.. Послушай мою историю</div>
+                <div class="phrases-wrapper" id="phrasesWrapper">
+                    <!-- Фразы вставляются через JS -->
+                </div>
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="dialog-portrait" id="portraitContainer">
+                <div class="portrait-frame"></div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="followModal">
+            <div class="modal-box">
+                <span class="candle">🕯️</span>
+                <h2>Ты пойдёшь за мной?</h2>
+                <p>«Не оборачивайся. Никогда не оборачивайся...»</p>
+                <div class="modal-buttons">
+                    <button class="btn-shadow btn-no" onclick="navigateTo('page-home')">НЕТ</button>
+                    <button class="btn-shadow" onclick="navigateTo('page-game')">ДА</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== СТРАНИЦА 3: ИГРА ===== -->
+    <div class="page" id="page-game">
+        <div class="game-container" id="gameContainer">
+            <div class="game-left">
+                <div id="gameHeader" style="display: none;">
+                    <h2 class="game-title">ГОГОЛЬ. ТЕНЬ НА СТЕНЕ</h2>
+                    <p class="game-sub">Мистический квест-детектив</p>
+                </div>
+
+                <div id="gameScene">
+                    <div class="scene-text" id="sceneText">Загрузка...</div>
+                    <div class="choices" id="choicesContainer"></div>
+                </div>
+
+                <div class="game-status" id="gameStatus">
+                    <span class="progress">Глава <span id="chapterNum">1</span> · Этап <span id="stepNum">1</span></span>
+                    <button class="btn-reset-game" onclick="resetGame()">⟳ Начать заново</button>
+                </div>
+            </div>
+
+            <div class="game-image-container" id="gameImageContainer">
+                <img id="gameImage" src="https://sun9-63.userapi.com/s/v1/ig2/hMPTGyghLq6uVeZp0tLCj90-LcUtLJZ-L5dNs58SFnvZ5I59OFkQu5Ub2e7gBDxXL5JAlhtbPUbD8eDTHpuTM64x.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1024x1024&from=bu&cs=1024x0"
+                alt="Гоголь. Тень на стене">
+
+                <div class="video-wrapper" id="videoWrapper">
+                    <iframe id="gameVideoIframe" 
+                        src="https://vk.com/clip_ext.php?oid=-239865197&id=456239020&autoplay=1&hash=2b5c6a8d3f7e9" 
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                        frameborder="0" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ВИДЕО НА ВЕСЬ ЭКРАН (10 секунд) ===== -->
+    <div class="fullscreen-video" id="fullscreenVideo">
+        <div class="video-container">
+            <iframe id="fullscreenVideoIframe" 
+                src="https://vk.com/video_ext.php?oid=-239865197&id=456239018&autoplay=1&hash=4d8e2f1a7c3b"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                frameborder="0" 
+                allowfullscreen>
+            </iframe>
+            <div class="video-overlay" id="videoOverlay"></div>
+        </div>
+    </div>
+
+    <!-- ===== ОКНО "СЛЕДОВАТЬ ЗА ТЕНЬЮ" ===== -->
+    <div class="shadow-modal" id="shadowModal">
+        <div class="shadow-box">
+            <span class="icon">🕯️</span>
+            <h2>СЛЕДОВАТЬ ЗА ТЕНЬЮ</h2>
+            <p>«Он выбрал тебя. Иди за мной. Не оборачивайся...»</p>
+            <button class="btn-shadow" onclick="playSecondVideo()">Следовать →</button>
+        </div>
+    </div>
+
+    <!-- ===== ОКНО "Ну что... ты идешь?" ===== -->
+    <div class="follow-modal-2" id="followModal2">
+        <div class="follow-box">
+            <span class="icon">🕯️</span>
+            <h2>Ну что... ты идёшь?</h2>
+            <p>«Ты готов узнать, что скрывается за тенью?»</p>
+            <div class="additional-text">«Только запомни дорогу...»</div>
+            <button class="btn-shadow" onclick="showCityModal()">Да, иду →</button>
+        </div>
+    </div>
+
+    <!-- ===== ОКНО "ГОРОД N" ===== -->
+    <div class="city-modal" id="cityModal">
+        <div class="city-wrapper">
+            <div class="city-box">
+                <span class="icon">🏛️</span>
+                <h2>Город N</h2>
+                <p>«В ворота гостиницы въехала довольно красивая рессорная бричка...»</p>
+                <button class="btn-shadow" onclick="startLandownerQuest()">Отправиться к помещикам →</button>
+            </div>
+            <div class="city-image">
+                <img src="https://sun9-81.userapi.com/s/v1/ig2/AqLM-6zZ1pQRR-wfa5sadOf1Ui7FymS7DvziiJp7bKO6rbjfStj9_mB-Poz4ul3k7RBvan79KQXT_4cIpCi75vPP.jpg?quality=95&as=32x18,48x27,72x41,108x61,160x90,240x135,360x203,480x270,540x304,640x360,720x405,1080x608,1280x720,1440x810,1672x941&from=bu&cs=1672x0"
+                alt="Город N">
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ФИНАЛЬНЫЙ ЭКРАН "Ты запомнил дорогу?" ===== -->
+    <div class="final-memory-modal" id="finalMemoryModal">
+        <div class="final-wrapper">
+            <div class="final-content">
+                <h2 class="final-title">Ты запомнил дорогу?</h2>
+                <p class="final-sub">Восстанови правильный порядок посещения помещиков</p>
+                <button class="btn-shadow" onclick="showFullscreenQuiz()">Проверить →</button>
+            </div>
+            <div class="final-image">
+                <img src="https://sun9-81.userapi.com/s/v1/ig2/AqLM-6zZ1pQRR-wfa5sadOf1Ui7FymS7DvziiJp7bKO6rbjfStj9_mB-Poz4ul3k7RBvan79KQXT_4cIpCi75vPP.jpg?quality=95&as=32x18,48x27,72x41,108x61,160x90,240x135,360x203,480x270,540x304,640x360,720x405,1080x608,1280x720,1440x810,1672x941&from=bu&cs=1672x0"
+                alt="Город N">
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ПОЛНОЭКРАННЫЙ КВИЗ ===== -->
+    <div class="fullscreen-quiz" id="fullscreenQuiz">
+        <div class="quiz-content">
+            <h2 class="quiz-title">ГОГОЛЬ. ТЕНЬ НА СТЕНЕ</h2>
+            <p class="quiz-sub">Мистический квест-детектив</p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#c8b8a8;margin-bottom:16px;">
+                Восстанови порядок посещения помещиков<br>
+                <span style="font-size:16px;color:#6a5a4a;">(нажимай по порядку)</span>
+            </p>
+            <div class="order-display" id="quizOrderDisplay">
+                Ваш порядок: <span style="color:#5a4a3a;">(нажмите на имена по порядку)</span>
+            </div>
+            <div class="names-grid" id="quizNamesContainer"></div>
+            <div class="quiz-status" id="quizStatus"></div>
+        </div>
+    </div>
+
+    <!-- ===== ФИНАЛЬНЫЙ ЭКРАН С ФОТО (слева текст, справа фото) ===== -->
+    <div class="ending-modal" id="endingModal">
+        <div class="ending-wrapper">
+            <div class="ending-box">
+                <div class="ending-text">
+                    <span class="highlight-text">«Я не искал истину. Я искал себя.»</span><br><br>
+                    Ты прошёл через тени, встретил помещиков, запомнил дорогу. И теперь ты знаешь:<br><br>
+                    <span class="highlight-text">Гоголь не сжёг второй том — он спрятал его внутри себя.</span><br><br>
+                    Он ждал не читателя. Он ждал того, кто <span class="highlight-text">поймёт</span>, что литература — это не слова на бумаге. Это <span class="highlight-text">приглашение</span> войти в чужую душу. И остаться там.<br><br>
+                    Ты запомнил дорогу. Теперь она — твоя.
+                </div>
+                <button class="btn-shadow" onclick="resetGame()">Начать заново</button>
+            </div>
+            <div class="ending-image">
+                <img src="https://sun9-47.userapi.com/s/v1/ig2/alhEaMMIad_YNKxS5_r0qK44yIEJm1J9o543WO423fUxWefftcZN2QKie1kPlGG_dybT7wpzGcThb33hTuvIKvzt.jpg?quality=95&as=32x45,48x68,72x102,108x154,160x227,240x341,360x512,480x683,540x768,640x910,720x1024,730x1038&from=bu&cs=730x0"
+                alt="Гоголь">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  ФРАЗЫ ДЛЯ ДИАЛОГА
+        // ============================================================
+        const PHRASES = [
+            'Я, Николай Гоголь, родился близ Диканьки. В три года я впервые увидел, как <span class="highlight">дьявол выходит здороваться с Богом</span>, уходящим на покой.',
+            'Мать крестилась, а я уже тогда знал, что мне дано видеть то, что другие прячут за веками.',
+            'В гимназии я за неделю предсказал смерть слуги в пожаре — просто сказал, что он пахнет гарью.',
+            'В Петербурге за мной пришла <span class="highlight">тень без отражения</span>, которую я позже назвал Вием.',
+            'Она диктовала мне «Вечера», пока перо ходило само, и моя рука немела. «Пиши, или я начну писать тобой», — шептала она.',
+            '<span class="highlight">Пушкин</span> бледнел, слушая мои сцены, но я не говорил ему, что вижу умерших, проходящих сквозь стены.',
+            'В Риме я молился и носил вериги, но в полночь на стене вырастал чёрный силуэт с длинными пальцами.',
+            'Сожжение второго тома <span class="highlight">«Мёртвых душ»</span> не было безумием — рукопись шевелилась, я слышал, как внутри бьются сердца моих героев.',
+            'Я понял: если оживлю их до конца, они выйдут в мир и заменят живых. Пламя в камине было зелёным.',
+            'Перед смертью я велел не хоронить до гниения, но меня закопали спящим. Я слышал, как сыплется земля, и открыл глаза уже под ней.',
+            'Теперь я стучусь из-под земли в старых книгах. <span class="highlight">Я — голос, который вы слышите в полночь, и я всё ещё жду, когда вы допишете мою историю, которую я не посмел закончить сам.</span>'
+        ];
+
+        const POSITIONS = [
+            'pos-1', 'pos-2', 'pos-3', 'pos-4', 'pos-5',
+            'pos-6', 'pos-7', 'pos-8', 'pos-9', 'pos-10', 'pos-11'
+        ];
+
+        // ============================================================
+        //  СОСТОЯНИЕ ДИАЛОГА
+        // ============================================================
+        let currentPhraseIndex = 0;
+        let autoInterval = null;
+        let isAutoPlaying = false;
+        let isMobile = window.innerWidth <= 900;
+        let dialogEnded = false;
+        let isListeningStarted = false;
+
+        const container = document.querySelector('.phrases-wrapper');
+        const progressBar = document.getElementById('progressBar');
+        const portraitContainer = document.getElementById('portraitContainer');
+        const batEyesContainer = document.getElementById('batEyesContainer');
+
+        // ============================================================
+        //  ГЛАЗА ЛЕТУЧИХ МЫШЕЙ
+        // ============================================================
+        function initBatEyes() {
+            const eyes = document.querySelectorAll('.bat-eye');
+            eyes.forEach(eye => {
+                const delay = parseFloat(eye.dataset.delay) || 0;
+                startBlinking(eye, delay);
+            });
+        }
+
+        function startBlinking(eye, initialDelay) {
+            const eyeElements = eye.querySelectorAll('.eye');
+
+            setTimeout(() => {
+                const interval = setInterval(() => {
+                    eyeElements.forEach(e => e.classList.add('closed'));
+
+                    setTimeout(() => {
+                        eyeElements.forEach(e => e.classList.remove('closed'));
+                    }, 180);
+                }, 3000 + Math.random() * 2000);
+            }, initialDelay * 1000);
+        }
+
+        // ============================================================
+        //  ПОСТРОЕНИЕ ДИАЛОГА
+        // ============================================================
+        function buildPhrases() {
+            container.innerHTML = '';
+            PHRASES.forEach((text, index) => {
+                const div = document.createElement('div');
+                div.className = `floating-phrase ${POSITIONS[index % POSITIONS.length]}`;
+                if (index === 0) div.classList.add('visible');
+                else div.classList.add('hidden');
+                div.innerHTML = text;
+                div.dataset.index = index;
+                container.appendChild(div);
+            });
+
+            progressBar.innerHTML = '';
+            PHRASES.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.dataset.index = index;
+                dot.addEventListener('click', () => goToPhrase(index));
+                progressBar.appendChild(dot);
+            });
+
+            updateShadowAnimation();
+        }
+
+        function updateShadowAnimation() {
+            const phrases = container.querySelectorAll('.floating-phrase');
+            phrases.forEach((p, i) => {
+                p.classList.remove('shadow-anim');
+                if (i === currentPhraseIndex && window.innerWidth > 900) {
+                    p.classList.add('shadow-anim');
+                }
+            });
+        }
+
+        function goToPhrase(index) {
+            if (index < 0 || index >= PHRASES.length) return;
+
+            const phrases = container.querySelectorAll('.floating-phrase');
+            const dots = progressBar.querySelectorAll('.progress-dot');
+
+            phrases.forEach((p, i) => {
+                p.classList.remove('visible', 'hidden');
+                if (i === index) {
+                    p.classList.add('visible');
+                } else {
+                    p.classList.add('hidden');
+                }
+            });
+
+            dots.forEach((d, i) => {
+                d.classList.remove('active', 'done');
+                if (i === index) d.classList.add('active');
+                if (i < index) d.classList.add('done');
+            });
+
+            currentPhraseIndex = index;
+            updateShadowAnimation();
+
+            if (index === PHRASES.length - 1 && !dialogEnded) {
+                dialogEnded = true;
+                if (isAutoPlaying) toggleAutoPlay();
+                setTimeout(() => {
+                    document.getElementById('followModal').classList.add('active');
+                }, 10000);
+            }
+        }
+
+        function nextPhrase() {
+            if (currentPhraseIndex < PHRASES.length - 1) {
+                goToPhrase(currentPhraseIndex + 1);
+            } else {
+                if (isAutoPlaying) toggleAutoPlay();
+            }
+        }
+
+        // ============================================================
+        //  АВТОПРОИГРЫВАНИЕ ДИАЛОГА
+        // ============================================================
+        function toggleAutoPlay() {
+            if (isAutoPlaying) {
+                clearInterval(autoInterval);
+                isAutoPlaying = false;
+            } else {
+                if (currentPhraseIndex === PHRASES.length - 1) {
+                    goToPhrase(0);
+                    dialogEnded = false;
+                }
+                isAutoPlaying = true;
+                autoInterval = setInterval(() => {
+                    if (currentPhraseIndex < PHRASES.length - 1) {
+                        nextPhrase();
+                    } else {
+                        toggleAutoPlay();
+                    }
+                }, 5000);
+            }
+        }
+
+        // ============================================================
+        //  ЗАПУСК ПРОСЛУШИВАНИЯ
+        // ============================================================
+        function startListening() {
+            if (isListeningStarted) return;
+            isListeningStarted = true;
+
+            const title = document.getElementById('invitationTitle');
+            title.classList.add('visible');
+
+            setTimeout(() => {
+                batEyesContainer.classList.add('active');
+                container.classList.add('active');
+                progressBar.classList.add('active');
+
+                if (!isAutoPlaying) {
+                    toggleAutoPlay();
+                }
+            }, 1500);
+        }
+
+        // ============================================================
+        //  НАВИГАЦИЯ
+        // ============================================================
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if (target) target.classList.add('active');
+            document.querySelectorAll('.nav-links button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.page === pageId);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (pageId !== 'page-dialog' && isAutoPlaying) {
+                toggleAutoPlay();
+            }
+            if (pageId === 'page-dialog') {
+                setTimeout(initBatEyes, 500);
+                setTimeout(startListening, 300);
+            }
+            if (pageId === 'page-game') {
+                document.getElementById('followModal').classList.remove('active');
+                startGame();
+            }
+            if (pageId === 'page-home') {
+                document.getElementById('followModal').classList.remove('active');
+            }
+        }
+
+        document.querySelectorAll('.nav-links button').forEach(btn => {
+            btn.addEventListener('click', () => navigateTo(btn.dataset.page));
+        });
+
+        // ============================================================
+        //  КЛИК ПО СТРАНИЦЕ ДИАЛОГА
+        // ============================================================
+        document.getElementById('page-dialog').addEventListener('click', (e) => {
+            if (isListeningStarted && !e.target.closest('.floating-phrase') &&
+                !e.target.closest('.progress-dot') && !e.target.closest('.modal-overlay')) {
+                if (!isAutoPlaying) {
+                    nextPhrase();
+                } else {
+                    toggleAutoPlay();
+                    nextPhrase();
+                }
+            }
+        });
+
+        // ============================================================
+        //  ИГРА
+        // ============================================================
+        let currentLandowner = 0;
+        let gameCompleted = false;
+        let videoTimer = null;
+        let landownersVisited = [];
+
+        const LANDOWNERS = [{
+            name: 'Манилов',
+            image: 'https://sun9-24.userapi.com/s/v1/ig2/yZ9HrYgNTrQPqZEmYmTtkidAiPvJNv-irMEvWy9HVcw8w-JjAuliljTQhSYISGwVua4_t7WY5ubTfonxuRN-QGOD.jpg?quality=95&as=32x57,48x85,72x128,108x192,160x284,240x426,360x640,480x853,540x959,640x1137,720x1279,941x1672&from=bu&cs=941x0',
+            description: 'Усадьба Манилова. Всё вокруг кажется приятным, но каким-то ненастоящим. На столе — книга, заложенная на 14-й странице уже два года.',
+            question: 'Манилов начал речь, но, как это часто бывает...',
+            options: ['...задумался о судьбе крестьян', '...запутался в собственных словах', '...предложил Чичикову чаю'],
+            correct: 1,
+            hint: 'Манилов постоянно теряет нить разговора, уходит в мечты.',
+            quote: '«Мечты Манилова были пусты, как его душа.»'
+        }, {
+            name: 'Коробочка',
+            image: 'https://sun9-81.userapi.com/s/v1/ig2/J5dvcRvUdYj2gxjglSlXkm1GtDiGDtEppm2DqPAp0VVwKPqwNJNlDD0_DuTEHbFXo-9aV1XwMqb3JZ4qE0k3QwB4.jpg?quality=95&as=32x57,48x85,72x128,108x192,160x284,240x426,360x640,480x853,540x959,640x1137,720x1279,941x1672&from=bu&cs=941x0',
+            description: 'Комната Коробочки — сундуки, шкатулки, сбитые вещи. На столе — мешочки с монетами.',
+            question: 'Коробочка говорит: «Так я тебе и поверила! Всё ты врёшь, чтобы задаром обобрать старуху...» Что нужно сделать, чтобы она согласилась?',
+            options: ['Предложить больше денег', 'Сказать, что души нужны для благотворительности', 'Пригрозить исправником'],
+            correct: 0,
+            hint: 'Коробочка успокаивается только когда получает деньги или вещи.',
+            quote: '«Коробочка знала цену всему, кроме себя.»'
+        }, {
+            name: 'Ноздрёв',
+            image: 'https://sun9-63.userapi.com/s/v1/ig2/FJYmfhHYduV6zQ3_yEz6R16Sf8WKoW3gLkrFN6RnAb0MqbV992oqsrloEsaax4oV-6QZEq26hh7Jz0Yn1IpbvKbD.jpg?quality=95&as=32x57,48x85,72x128,108x192,160x284,240x426,360x640,480x853,540x959,640x1137,720x1279,941x1672&from=bu&cs=941x0',
+            description: 'Гостиная Ноздрёва. Везде — карты, шашки, пустые бутылки. Слышен лай собак. Сам Ноздрёв — с азартным взглядом.',
+            question: 'Ноздрёв предлагает сыграть в шашки на 100 душ. Он уже переставил фигуры на доске. Ваш ход?',
+            options: ['Начать игру и попытаться выиграть', 'Заметить, что доска расставлена неправильно, и отказаться',
+                'Сказать, что играете только на деньги'
+            ],
+            correct: 1,
+            hint: 'Ноздрёв — шулер, игра с ним — проигрыш.',
+            quote: '«Ноздрёв проигрывал себя в карты, но никогда не мог проиграть свою натуру.»'
+        }, {
+            name: 'Собакевич',
+            image: 'https://sun9-53.userapi.com/s/v1/ig2/PLvhqsbKAtHmR54od4EKDV_ETxZpqiwJoA373SUbmeDYgSUPNkQK4aJFzWqeeZsjDryGRZZUeRJdaRNt1jy6m05m.jpg?quality=95&as=32x57,48x85,72x128,108x192,160x284,240x426,360x640,480x853,540x959,640x1137,720x1279,941x1672&from=bu&cs=941x0',
+            description: 'Поместье Собакевича — массивное, топорное, но крепкое. Сам Собакевич похож на медведя, говорит грубо, но по делу.',
+            question: 'Собакевич говорит: «Ты, мил человек, по делу пришёл. Так я и предложу тебе цену, которая по совести.» Что ему ответить?',
+            options: ['«Я пришёл с честной ценой, выше не дам»', '«Я куплю оптом, но по твоей цене»',
+                '«Скажи, почём душа у тебя?»'
+            ],
+            correct: 0,
+            hint: 'Собакевич уважает прямые, конкретные договорённости.',
+            quote: '«Собакевич знал, что душа — товар, но не знал, что товар этот уже мёртв.»'
+        }, {
+            name: 'Плюшкин',
+            image: 'https://sun9-77.userapi.com/s/v1/ig2/Qyj1AErllW3bUijmG5ccrC4N9NYVjy57aV7XTENLPVqUJd77XR1GGvr1dRv80g5VVfIq7lCywpybo1a-r4Rm3pjv.jpg?quality=95&as=32x57,48x85,72x128,108x192,160x284,240x426,360x640,480x853,540x959,640x1137,720x1279,941x1672&from=bu&cs=941x0',
+            description: 'Поместье Плюшкина — нищета и запустение, хотя закрома ломятся от добра. Дом похож на склад хлама. Сам Плюшкин — сгорбленный старик.',
+            question: 'Плюшкин хранит всё подряд. Что из этого имеет реальную ценность?',
+            options: ['Ржавый ключ', 'Старая книга с пятнами', 'Окурок свечи'],
+            correct: 1,
+            hint: 'Книга может содержать записи, ценные для восстановления рукописи.',
+            quote: '«Плюшкин потерял себя среди вещей, которые он собирал для себя.»'
+        }];
+
+        const CORRECT_ORDER = ['Манилов', 'Коробочка', 'Ноздрёв', 'Собакевич', 'Плюшкин'];
+
+        // ============================================================
+        //  ЗАПУСК ИГРЫ
+        // ============================================================
+        function startGame() {
+            currentLandowner = 0;
+            gameCompleted = false;
+            landownersVisited = [];
+            document.getElementById('gameHeader').style.display = 'block';
+            document.getElementById('shadowModal').classList.remove('active');
+            document.getElementById('followModal2').classList.remove('active');
+            document.getElementById('cityModal').classList.remove('active');
+            document.getElementById('fullscreenVideo').classList.remove('active');
+            document.getElementById('finalMemoryModal').classList.remove('active');
+            document.getElementById('fullscreenQuiz').classList.remove('active');
+            document.getElementById('endingModal').classList.remove('active');
+            document.getElementById('chapterNum').textContent = '1';
+            document.getElementById('stepNum').textContent = '1';
+
+            showIntroScene();
+        }
+
+        // ============================================================
+        //  СЦЕНА 1: МОСКВА 2026
+        // ============================================================
+        function showIntroScene() {
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                'Москва. 2026 год. Мне позвонили из частного музея. Сказали, что на чердаке дома, где когда-то жил Гоголь, нашли сундук с его бумагами. Я — архивариус. Это моя работа. Но я не знал, что на самом деле найду...';
+            sceneText.className = 'scene-text intro-text';
+
+            document.getElementById('chapterNum').textContent = '1';
+            document.getElementById('stepNum').textContent = '1';
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+            const btn = document.createElement('button');
+            btn.className = 'choice-btn';
+            btn.textContent = 'Дальше →';
+            btn.addEventListener('click', showRoomScene);
+            choicesContainer.appendChild(btn);
+
+            const imageElement = document.getElementById('gameImage');
+            imageElement.src = 'https://sun9-63.userapi.com/s/v1/ig2/hMPTGyghLq6uVeZp0tLCj90-LcUtLJZ-L5dNs58SFnvZ5I59OFkQu5Ub2e7gBDxXL5JAlhtbPUbD8eDTHpuTM64x.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1024x1024&from=bu&cs=1024x0';
+            document.getElementById('videoWrapper').style.display = 'none';
+            const iframe = document.getElementById('gameVideoIframe');
+            if (iframe) iframe.src = '';
+        }
+
+        // ============================================================
+        //  СЦЕНА 2: КОМНАТА С СУНДУКОМ
+        // ============================================================
+        function showRoomScene() {
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                'На столе — лампа с зелёным абажуром, стопка книг, чашка остывшего чая. В центре — старый кожаный сундук, перетянутый ржавыми ремнями.';
+            sceneText.className = 'scene-text big-text';
+
+            document.getElementById('stepNum').textContent = '2';
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            const btn1 = document.createElement('button');
+            btn1.className = 'choice-btn';
+            btn1.textContent = '🔍 Осмотреть комнату';
+            btn1.addEventListener('click', showInspectRoomScene);
+            choicesContainer.appendChild(btn1);
+
+            const btn2 = document.createElement('button');
+            btn2.className = 'choice-btn';
+            btn2.textContent = '📖 Открыть сундук';
+            btn2.addEventListener('click', showOpenChestScene);
+            choicesContainer.appendChild(btn2);
+
+            const imageElement = document.getElementById('gameImage');
+            imageElement.src = 'https://sun9-66.userapi.com/s/v1/ig2/cD8Sc5EgicNHToZ-25TDRcu5FSWdu1JgpqeLKx65f2m0ria3fmhAP4rxclyrYwDGPsRmpt4A0VoM_pR5Er04Wreo.jpg?quality=95&as=32x16,48x25,72x37,108x55,160x82,240x123,360x184,480x246,540x276,640x328,720x369,1080x553,1280x655,1344x688&from=bu&cs=1344x0';
+            document.getElementById('videoWrapper').style.display = 'none';
+            const iframe = document.getElementById('gameVideoIframe');
+            if (iframe) iframe.src = '';
+        }
+
+        // ============================================================
+        //  СЦЕНА 2А: ОСМОТР КОМНАТЫ
+        // ============================================================
+        function showInspectRoomScene() {
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                'Вы осматриваете комнату.<br><br>🖼️ <span class="highlight-text">Портрет Гоголя</span> на стене — он смотрит исподлобья. Кажется, он знает, зачем вы здесь.<br><br>📚 <span class="highlight-text">Книжный шкаф</span> — издания XIX века. Между ними — пустая щель, словно из неё что-то вынули.<br><br>Сундук остаётся главной целью.';
+            sceneText.className = 'scene-text medium-text';
+
+            document.getElementById('stepNum').textContent = '2a';
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            const btn = document.createElement('button');
+            btn.className = 'choice-btn';
+            btn.textContent = '📖 Открыть сундук';
+            btn.addEventListener('click', showOpenChestScene);
+            choicesContainer.appendChild(btn);
+
+            const imageElement = document.getElementById('gameImage');
+            imageElement.src = 'https://sun9-54.userapi.com/s/v1/ig2/pMI5kE1F0gGGQuFKsaKNRGk5IHxJdJYS2j8JL4mqmwVhrvfSXL0ygPH2MG1TtK7ssQya-yaTM3vBzccgyq7oCz-K.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1170x1170&from=bu&cs=1170x0';
+            document.getElementById('videoWrapper').style.display = 'none';
+            const iframe = document.getElementById('gameVideoIframe');
+            if (iframe) iframe.src = '';
+        }
+
+        // ============================================================
+        //  СЦЕНА 3: ОТКРЫТИЕ СУНДУКА (с видео)
+        // ============================================================
+        function showOpenChestScene() {
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                'Вы подходите к сундуку. Ремни сами распадаются, крышка медленно поднимается с протяжным скрипом. Внутри — стопка писем, чернильница, истлевший шарф и толстая тетрадь в чёрной обложке.';
+            sceneText.className = 'scene-text video-text';
+
+            document.getElementById('stepNum').textContent = '3';
+
+            const videoWrapper = document.getElementById('videoWrapper');
+            const imageElement = document.getElementById('gameImage');
+            imageElement.style.display = 'none';
+            videoWrapper.style.display = 'block';
+
+            const iframe = document.getElementById('gameVideoIframe');
+            iframe.src = 'https://vk.com/clip_ext.php?oid=-239865197&id=456239020&autoplay=1&hash=2b5c6a8d3f7e9';
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            const btn = document.createElement('button');
+            btn.className = 'choice-btn';
+            btn.textContent = '📖 Открыть тетрадь';
+            btn.addEventListener('click', () => {
+                iframe.src = '';
+                videoWrapper.style.display = 'none';
+                imageElement.style.display = 'block';
+                showNotebookScene();
+            });
+            choicesContainer.appendChild(btn);
+        }
+
+        // ============================================================
+        //  СЦЕНА 4: ТЕТРАДЬ (без фото, только чёрный фон)
+        // ============================================================
+        function showNotebookScene() {
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                'Ты открываешь тетрадь. Страницы исписаны мелким, нервным почерком. Это дневник Гоголя.';
+            sceneText.className = 'scene-text medium-text';
+
+            document.getElementById('stepNum').textContent = '4';
+
+            // Убираем изображение — показываем чёрный фон
+            const imageElement = document.getElementById('gameImage');
+            imageElement.style.display = 'none';
+            document.getElementById('videoWrapper').style.display = 'none';
+
+            // Добавляем чёрный фон
+            const container = document.getElementById('gameImageContainer');
+            container.style.background = '#000';
+
+            // Удаляем старый оверлей если есть
+            const oldOverlay = document.getElementById('textOverlay');
+            if (oldOverlay) oldOverlay.remove();
+
+            // Создаём новый оверлей с текстом
+            const newOverlay = document.createElement('div');
+            newOverlay.id = 'textOverlay';
+            newOverlay.style.cssText = `
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 20px;
+                        pointer-events: none;
+                        z-index: 5;
+                        background: rgba(0,0,0,0.8);
+                    `;
+
+            const textLines = [
+                '«Если Вы читаете это —',
+                'значит, я уже мёртв. Или нет?',
+                'Время для меня остановилось',
+                'в ту ночь, когда я сжёг второй том.',
+                'Я ждал того, кто не испугается',
+                'это закончить.»'
+            ];
+
+            textLines.forEach((line, index) => {
+                const p = document.createElement('p');
+                p.textContent = line;
+                p.style.cssText = `
+                            font-family: 'Cormorant Garamond', serif;
+                            font-size: clamp(20px, 3vw, 36px);
+                            color: #f0e8d0;
+                            text-shadow: 0 0 30px rgba(0,0,0,0.9), 0 0 60px rgba(0,0,0,0.7);
+                            opacity: 0;
+                            transition: opacity 0.8s ease;
+                            margin: 4px 0;
+                            text-align: center;
+                            letter-spacing: 1px;
+                            font-weight: 700;
+                            line-height: 1.3;
+                        `;
+                p.dataset.lineIndex = index;
+                newOverlay.appendChild(p);
+            });
+
+            container.appendChild(newOverlay);
+
+            // Показываем строки с задержкой
+            const lines = newOverlay.querySelectorAll('p');
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    line.style.opacity = '1';
+                }, 500 + index * 700);
+            });
+
+            const totalDelay = 500 + textLines.length * 700 + 500;
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            const shadowBtn = document.createElement('button');
+            shadowBtn.className = 'choice-btn';
+            shadowBtn.textContent = '🕯️ СЛЕДОВАТЬ ЗА ТЕНЬЮ';
+            shadowBtn.style.textAlign = 'center';
+            shadowBtn.style.fontWeight = '700';
+            shadowBtn.style.fontSize = '18px';
+            shadowBtn.style.padding = '14px 24px';
+
+            setTimeout(() => {
+                choicesContainer.appendChild(shadowBtn);
+            }, totalDelay);
+
+            shadowBtn.addEventListener('click', () => {
+                const overlayEl = document.getElementById('textOverlay');
+                if (overlayEl) overlayEl.remove();
+                container.style.background = '#0a0a0a';
+                document.getElementById('shadowModal').classList.add('active');
+            });
+        }
+
+        // ============================================================
+        //  ВИДЕО 10 СЕКУНД
+        // ============================================================
+        function playSecondVideo() {
+            document.getElementById('shadowModal').classList.remove('active');
+
+            const videoContainer = document.getElementById('fullscreenVideo');
+            const overlay = document.getElementById('videoOverlay');
+            const iframe = document.getElementById('fullscreenVideoIframe');
+
+            videoContainer.classList.add('active');
+            overlay.classList.remove('fade');
+            iframe.src = 'https://vk.com/video_ext.php?oid=-239865197&id=456239018&autoplay=1&hash=4d8e2f1a7c3b';
+
+            if (videoTimer) clearTimeout(videoTimer);
+            videoTimer = setTimeout(() => {
+                overlay.classList.add('fade');
+
+                setTimeout(() => {
+                    videoContainer.classList.remove('active');
+                    iframe.src = '';
+                    document.getElementById('followModal2').classList.add('active');
+                }, 1500);
+            }, 10000);
+        }
+
+        // ============================================================
+        //  ОКНО "ГОРОД N"
+        // ============================================================
+        function showCityModal() {
+            document.getElementById('followModal2').classList.remove('active');
+            document.getElementById('cityModal').classList.add('active');
+        }
+
+        // ============================================================
+        //  НАЧАЛО КВЕСТА С ПОМЕЩИКАМИ
+        // ============================================================
+        function startLandownerQuest() {
+            document.getElementById('cityModal').classList.remove('active');
+            document.getElementById('gameHeader').style.display = 'block';
+            document.querySelector('.game-status').style.display = 'flex';
+            document.getElementById('chapterNum').textContent = '1';
+            document.getElementById('stepNum').textContent = '1';
+            landownersVisited = [];
+            loadLandowner(0);
+        }
+
+        function loadLandowner(index) {
+            if (index >= LANDOWNERS.length) {
+                showFinalMemoryScreen();
+                return;
+            }
+
+            const landowner = LANDOWNERS[index];
+            currentLandowner = index;
+
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML =
+                `<span class="highlight-text">${landowner.name}</span><br><br>${landowner.description}<br><br>«${landowner.question}»`;
+            sceneText.className = 'scene-text medium-text';
+
+            document.getElementById('chapterNum').textContent = index + 1;
+
+            const imageElement = document.getElementById('gameImage');
+            const videoWrapper = document.getElementById('videoWrapper');
+            imageElement.style.display = 'block';
+            imageElement.src = landowner.image;
+            videoWrapper.style.display = 'none';
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            landowner.options.forEach((option, optIndex) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = option;
+                btn.addEventListener('click', () => handleLandownerAnswer(optIndex, index));
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function handleLandownerAnswer(selected, landownerIndex) {
+            const landowner = LANDOWNERS[landownerIndex];
+            const isCorrect = (selected === landowner.correct);
+            const btns = document.querySelectorAll('.choice-btn');
+
+            btns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === landowner.correct) {
+                    btn.style.borderColor = '#4a8c5a';
+                    btn.style.background = '#1a3a2a';
+                    btn.style.color = '#8aba8a';
+                }
+                if (idx === selected && !isCorrect) {
+                    btn.style.borderColor = '#8a3a2a';
+                    btn.style.background = '#3a1a1a';
+                    btn.style.color = '#c88a7a';
+                }
+            });
+
+            const sceneText = document.getElementById('sceneText');
+            if (isCorrect) {
+                if (!landownersVisited.includes(landowner.name)) {
+                    landownersVisited.push(landowner.name);
+                }
+
+                sceneText.innerHTML =
+                    `<span class="highlight-text">✅ Верно!</span> ${landowner.hint}<br><br><span class="highlight-text">«${landowner.quote}»</span>`;
+
+                const choicesContainer = document.getElementById('choicesContainer');
+                choicesContainer.innerHTML = '';
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'choice-btn';
+                nextBtn.textContent = '➡️ Следующий помещик';
+                nextBtn.style.textAlign = 'center';
+                nextBtn.addEventListener('click', () => {
+                    loadLandowner(landownerIndex + 1);
+                });
+                choicesContainer.appendChild(nextBtn);
+            } else {
+                sceneText.innerHTML =
+                    `<span class="highlight-text">❌ Неверно.</span> ${landowner.hint}<br><br>Попробуй снова!`;
+
+                const choicesContainer = document.getElementById('choicesContainer');
+                choicesContainer.innerHTML = '';
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'choice-btn';
+                retryBtn.textContent = '🔄 Попробовать снова';
+                retryBtn.style.textAlign = 'center';
+                retryBtn.addEventListener('click', () => {
+                    loadLandowner(landownerIndex);
+                });
+                choicesContainer.appendChild(retryBtn);
+            }
+        }
+
+        // ============================================================
+        //  ФИНАЛЬНЫЙ ЭКРАН "Ты запомнил дорогу?"
+        // ============================================================
+        function showFinalMemoryScreen() {
+            document.getElementById('gameHeader').style.display = 'none';
+            document.querySelector('.game-status').style.display = 'none';
+
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML = '';
+            sceneText.className = 'scene-text';
+
+            document.getElementById('choicesContainer').innerHTML = '';
+
+            document.getElementById('finalMemoryModal').classList.add('active');
+        }
+
+        // ============================================================
+        //  ПОЛНОЭКРАННЫЙ КВИЗ
+        // ============================================================
+        function showFullscreenQuiz() {
+            document.getElementById('finalMemoryModal').classList.remove('active');
+            document.getElementById('fullscreenQuiz').classList.add('active');
+
+            const orderDisplay = document.getElementById('quizOrderDisplay');
+            const namesContainer = document.getElementById('quizNamesContainer');
+            const statusEl = document.getElementById('quizStatus');
+
+            let selectedOrder = [];
+
+            const shuffled = [...LANDOWNERS.map(l => l.name)];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            namesContainer.innerHTML = '';
+
+            shuffled.forEach(name => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn';
+                btn.textContent = name;
+                btn.dataset.name = name;
+                btn.addEventListener('click', () => {
+                    if (selectedOrder.includes(name)) return;
+                    if (selectedOrder.length >= 5) return;
+
+                    selectedOrder.push(name);
+                    btn.classList.add('selected');
+
+                    if (selectedOrder.length === 0) {
+                        orderDisplay.innerHTML = 'Ваш порядок: <span style="color:#5a4a3a;">(нажмите на имена по порядку)</span>';
+                    } else {
+                        orderDisplay.innerHTML = 'Ваш порядок: ' + selectedOrder.map((n, i) =>
+                            `<span class="order-item">${i+1}. ${n}</span>`
+                        ).join(' → ');
+                    }
+
+                    document.querySelectorAll('#quizNamesContainer .quiz-btn').forEach(b => {
+                        if (selectedOrder.includes(b.dataset.name)) {
+                            b.classList.add('selected');
+                        }
+                    });
+
+                    if (selectedOrder.length === 5) {
+                        const isCorrect = selectedOrder.every((n, i) => n === CORRECT_ORDER[i]);
+                        if (isCorrect) {
+                            statusEl.textContent = '✅ Правильно! Ты запомнил дорогу.';
+                            statusEl.style.color = '#8aba8a';
+                            setTimeout(() => {
+                                document.getElementById('fullscreenQuiz').classList.remove('active');
+                                document.getElementById('endingModal').classList.add('active');
+                            }, 1200);
+                        } else {
+                            statusEl.textContent = '❌ Неправильный порядок! Попробуй ещё раз.';
+                            statusEl.style.color = '#c88a7a';
+                            setTimeout(() => {
+                                selectedOrder = [];
+                                document.querySelectorAll('#quizNamesContainer .quiz-btn').forEach(b => {
+                                    b.classList.remove('selected');
+                                });
+                                orderDisplay.innerHTML =
+                                'Ваш порядок: <span style="color:#5a4a3a;">(нажмите на имена по порядку)</span>';
+                                statusEl.textContent = '';
+                            }, 1500);
+                        }
+                    }
+                });
+                namesContainer.appendChild(btn);
+            });
+        }
+
+        // ============================================================
+        //  СБРОС ИГРЫ
+        // ============================================================
+        function resetGame() {
+            if (videoTimer) {
+                clearTimeout(videoTimer);
+                videoTimer = null;
+            }
+            document.getElementById('fullscreenVideo').classList.remove('active');
+            document.getElementById('shadowModal').classList.remove('active');
+            document.getElementById('followModal2').classList.remove('active');
+            document.getElementById('cityModal').classList.remove('active');
+            document.getElementById('finalMemoryModal').classList.remove('active');
+            document.getElementById('fullscreenQuiz').classList.remove('active');
+            document.getElementById('endingModal').classList.remove('active');
+
+            const overlay = document.getElementById('textOverlay');
+            if (overlay) overlay.remove();
+
+            const container = document.getElementById('gameImageContainer');
+            container.style.background = '#0a0a0a';
+
+            currentLandowner = 0;
+            gameCompleted = false;
+            landownersVisited = [];
+            document.getElementById('gameHeader').style.display = 'block';
+            document.querySelector('.game-status').style.display = 'flex';
+
+            const sceneText = document.getElementById('sceneText');
+            sceneText.innerHTML = 'Загрузка...';
+            sceneText.className = 'scene-text';
+
+            document.getElementById('choicesContainer').innerHTML = '';
+            document.getElementById('chapterNum').textContent = '1';
+            document.getElementById('stepNum').textContent = '1';
+
+            const videoWrapper = document.getElementById('videoWrapper');
+            videoWrapper.style.display = 'none';
+            const imageElement = document.getElementById('gameImage');
+            imageElement.style.display = 'block';
+
+            startGame();
+        }
+
+        // ============================================================
+        //  ОБРАБОТКА РАЗМЕРА ЭКРАНА
+        // ============================================================
+        window.addEventListener('resize', () => {
+            const wasMobile = isMobile;
+            isMobile = window.innerWidth <= 900;
+            if (wasMobile !== isMobile) {
+                buildPhrases();
+                goToPhrase(currentPhraseIndex);
+            }
+            updateShadowAnimation();
+        });
+
+        // ============================================================
+        //  ЗАПУСК
+        // ============================================================
+        buildPhrases();
+        navigateTo('page-home');
+        initBatEyes();
+
+        // Попытка автоматического запуска музыки
+        const bgMusic = document.getElementById('bg-music');
+        document.addEventListener('click', () => {
+            if (bgMusic) {
+                bgMusic.src = bgMusic.src;
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
